@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breast Cancer Detection AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .navbar {
+            width: 100%; padding: 1.5rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .navbar h2 { font-weight: 700; letter-spacing: 1px; color: #f8fafc; }
+        .nav-links a {
+            color: #cbd5e1; text-decoration: none; margin-left: 2rem;
+            font-weight: 600; transition: color 0.3s ease;
+        }
+        .nav-links a:hover { color: #38bdf8; }
+        .container {
+            max-width: 800px; width: 90%; margin: 4rem auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #f8fafc; }
+        p.subtitle { color: #94a3b8; margin-bottom: 3rem; font-size: 1.1rem; }
+        
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 15px; padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.01);
+            transition: all 0.3s ease; cursor: pointer;
+            margin-bottom: 2rem;
+            display: block;
+        }
+        .upload-area:hover {
+            border-color: #38bdf8; background: rgba(56, 189, 248, 0.05);
+        }
+        input[type="file"] { display: none; }
+        .upload-btn {
+            background: #38bdf8; color: #0f172a;
+            padding: 10px 25px; border-radius: 8px; font-weight: 600;
+            display: inline-block; margin-top: 15px; cursor: pointer;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+        .upload-btn:hover { background: #7dd3fc; transform: translateY(-2px); }
+        
+        button[type="submit"] {
+            background: linear-gradient(to right, #8b5cf6, #ec4899);
+            color: white; border: none; padding: 15px 40px;
+            font-size: 1.2rem; font-weight: 700; border-radius: 30px;
+            cursor: pointer; box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.5);
+        }
+        
+        .result-box {
+            margin-top: 3rem; padding: 2rem;
+            border-radius: 15px; background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: slideUp 0.5s ease;
+        }
+        .result-text { font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 600; }
+        .result-image {
+            max-width: 100%; border-radius: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h2>NeuroMed AI</h2>
+        <div class="nav-links">
+            <a href="/">Scanner</a>
+            <a href="/train_reslt">Model Results</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h1>Breast Cancer Detection</h1>
+        <p class="subtitle">Upload an ultrasound image for AI-powered classification.</p>
+        
+        {% if not prediction %}
+        <form action="/submit" method="POST" enctype="multipart/form-data">
+            <label class="upload-area" id="uploadArea">
+                <div style="font-size: 3rem; margin-bottom: 10px;">🩺</div>
+                <h3 id="uploadText">Drag & drop or click to upload scan</h3>
+                <p style="color: #64748b; font-size: 0.9rem; margin-top: 5px;">Supports PNG, JPG, JPEG</p>
+                <input type="file" name="my_image" id="fileInput" accept="image/*" required onchange="updateFileName()">
+                <span class="upload-btn">Browse Files</span>
+            </label>
+            <button type="submit">Run Analysis</button>
+        </form>
+        {% endif %}
+
+        {% if prediction %}
+            <div class="result-box">
+                <div class="result-text">
+                    Diagnosis: 
+                    <span style="color: {% if 'Invalid' in prediction %}#f97316{% elif prediction == 'Malignant' %}#ef4444{% elif prediction == 'Benign' %}#eab308{% else %}#22c55e{% endif %}; font-size: 1.8rem; font-weight: 700;">
+                        {{ prediction }}
+                    </span>
+                </div>
+                {% if img_path %}
+                    <img src="{{ img_path }}" alt="Scan" class="result-image">
+                {% endif %}
+            </div>
+            <div style="margin-top: 2rem;">
+                <a href="/" class="upload-btn" style="text-decoration: none; padding: 12px 30px;">Scan Another Image</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function updateFileName() {
+            const input = document.getElementById('fileInput');
+            const text = document.getElementById('uploadText');
+            if (input.files && input.files[0]) {
+                text.textContent = 'Selected: ' + input.files[0].name;
+                text.style.color = '#38bdf8';
+            }
+        }
+    </script>
+</body>
+</html>

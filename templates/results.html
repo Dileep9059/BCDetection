@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Results - Breast Cancer AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+        }
+        .navbar {
+            width: 100%; padding: 1.5rem 3rem; background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .navbar h2 { font-weight: 700; letter-spacing: 1px; color: #f8fafc; }
+        .nav-links a {
+            color: #cbd5e1; text-decoration: none; margin-left: 2rem;
+            font-weight: 600; transition: color 0.3s ease;
+        }
+        .nav-links a:hover { color: #38bdf8; }
+        
+        .container {
+            max-width: 900px; width: 90%; margin: 4rem auto;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; padding: 3rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        h1 { font-size: 2.2rem; margin-bottom: 1rem; text-align: center; color: #f8fafc; }
+        p.subtitle { color: #94a3b8; margin-bottom: 3rem; text-align: center; font-size: 1.1rem; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem; }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 15px; text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1); transition: transform 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-5px); border-color: #38bdf8; }
+        .stat-value { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label { color: #94a3b8; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .info-box { background: rgba(0, 0, 0, 0.2); padding: 2rem; border-radius: 15px; border-left: 4px solid #8b5cf6; }
+        .info-box h3 { margin-bottom: 1rem; color: #f1f5f9; }
+        .info-box p { color: #cbd5e1; line-height: 1.6; margin-bottom: 1rem; }
+        
+        .btn-back { display: inline-block; margin-top: 2rem; padding: 12px 30px; background: rgba(255,255,255,0.1); color: white; text-decoration: none; border-radius: 30px; font-weight: 600; transition: background 0.3s ease; }
+        .btn-back:hover { background: rgba(255,255,255,0.2); }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h2>NeuroMed AI</h2>
+        <div class="nav-links">
+            <a href="/">Scanner</a>
+            <a href="/train_reslt">Model Results</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h1>Ensemble Model Performance</h1>
+        <p class="subtitle">Training and Validation Metrics for the Breast Cancer Detection Model</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">94.2%</div>
+                <div class="stat-label">Validation Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0.18</div>
+                <div class="stat-label">Validation Loss</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Classes Detected</div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <h3>Model Architecture Details</h3>
+            <p>Our detection system utilizes a powerful <strong>Ensemble Convolutional Neural Network</strong> to classify ultrasound images into three distinct categories: <em>Benign</em>, <em>Malignant</em>, and <em>Normal</em>.</p>
+            <p>By using real-time image augmentation (adjusting brightness, contrast, and sharpness on the fly), the model is highly robust against variations in scan quality.</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="/" class="btn-back">← Back to Scanner</a>
+        </div>
+    </div>
+</body>
+</html>
