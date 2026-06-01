@@ -1,3 +1,5 @@
+import os
+import gdown
 from flask import Flask, render_template, request
 import cv2
 import numpy as np
@@ -13,7 +15,17 @@ import random
 
 
 app = Flask(__name__)
-model = load_model("ensemble_model.h5", compile=False)
+
+# --- Cloud Model Download Logic ---
+MODEL_PATH = "ensemble_model.h5"
+# REPLACE the string below with your Google Drive File ID
+GDRIVE_FILE_ID = "YOUR_GOOGLE_DRIVE_FILE_ID_HERE"
+
+if not os.path.exists(MODEL_PATH):
+    print(f"Model not found locally. Downloading from Google Drive...")
+    gdown.download(id=GDRIVE_FILE_ID, output=MODEL_PATH, quiet=False)
+
+model = load_model(MODEL_PATH, compile=False)
 
 def predict_label(img_path):
     img = load_img(img_path, target_size=(128, 128))
